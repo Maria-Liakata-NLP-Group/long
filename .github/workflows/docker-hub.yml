@@ -3,8 +3,7 @@ name: Push to DockerHub
 on:
   push:
     branches:
-      - 'main'
-      - 'dockerhub-deploy-via-gh-actions'
+      - '*'
     tags:
       - "v*"
 
