@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  # long_app:
+  #   image: node:12-alpine
+  #   command: sh -c "yarn install && yarn run dev"
+  #   ports:
+  #     - 3000:3000
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  #   environment:
+  #     MYSQL_HOST: mysql
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: secret
+  #     MYSQL_DB: todos
+
+  dsnb:
+    image: jupyter/datascience-notebook:0fd03d9356de
+    hostname: dsnb
+    # ports:
+    #   - 10001:8888
+    working_dir: /notebooks
+    networks:
+      internal:
+        aliases:
+          - dsnb
+    volumes:
+      - ./unmanaged/:/notebooks
+      - ./jupyterlab/jupyter_server_config.py:/home/jovyan/.jupyter/jupyter_server_config.py
+
+  webserver:
+    image: nginx
+    hostname: webserver
+    ports:
+      - 80:80
+    networks:
+      internal:
+        aliases:
+          - webserver
+    volumes:
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/static:/data/www
+    depends_on:
+      - dsnb
+
+networks:
+  internal: {}
+
+# volumes:
+#   todo-mysql-data:
