@@ -3,9 +3,7 @@ name: Push to DockerHub
 on:
   push:
     branches:
-      - '*'
-    tags:
-      - "v*"
+      - main
   pull_request:
     branches:
       - main
