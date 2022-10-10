@@ -22,3 +22,5 @@ LLLLLLLLLLLLLLLLLLLLLLLL   ooooooooooo   NNNNNNNN         NNNNNNN        GGGGGG 
 "LoNG" is a web user interface for performing longitudinal NLP analysis.
 
 It will be an integrated collection of tools.
+
+See [Documentation for more details](https://maria-liakata-nlp-group.github.io/long/#/).

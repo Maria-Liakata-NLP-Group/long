@@ -18,11 +18,11 @@ Wait until you should see output from both the `long-webserver-1` and `long-dsnb
 
 ## Launch the browser
 
-With your prefered browser, goto:
+With your preferred browser, goto:
 ```
 http://localhost/
 ```
 
-If anything has worked correctly then you should see the placeholder landing page, as below:
+If everthing has worked correctly then you should see the placeholder landing page, as below:
 
 ![Image](./images/placeholder_landing_page.png)

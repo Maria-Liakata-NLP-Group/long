@@ -29,6 +29,15 @@ services:
       - ./unmanaged/:/notebooks
       - ./jupyterlab/jupyter_server_config.py:/home/jovyan/.jupyter/jupyter_server_config.py
 
+  webapp:
+    build: app/
+    networks:
+      internal:
+        aliases:
+          - webapp
+    volumes:
+      - ./app:/usr/src/app
+
   webserver:
     image: nginx
     hostname: webserver

@@ -9,10 +9,22 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
         exclude: docs/images/
+
+# The docker based version of this hook `hadolint-docker` does not work on M1 Macs
+# -   repo: https://github.com/hadolint/hadolint
+#     rev: v2.10.0
+#     hooks:
+#       - id: hadolint-docker
+#
+# Therefore we are using a hook which makes a direct call to
+# `hadolint` locally installed. It may turn out that this is not a reasonable
+# assumption for all developers machines. If necessary we might review this
+# hook in due course.
 -   repo: https://github.com/hadolint/hadolint
     rev: v2.10.0
     hooks:
-      - id: hadolint-docker
+      - id: hadolint
+
 -   repo: https://github.com/IamTheFij/docker-pre-commit
     rev: v2.1.0
     hooks:
