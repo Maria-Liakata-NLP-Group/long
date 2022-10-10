@@ -36,9 +36,12 @@ https://www.software.ac.uk/news/new-guide-how-reproducible-should-research-softw
 To build this repo locally,it is assumed that a developer has installed:
 
 - VSCode or a comparable editor
-- Docker Desktop or Docker + docker compose
-- [`hadolint`](https://hadolint.github.io/hadolint/)
+- Docker Desktop or Docker + docker compose.
+- [`pre-commit`](https://pre-commit.com/).
+- [`hadolint`](https://hadolint.github.io/hadolint/) is used for linting Dockerfiles.
+- (optional) [`act`](https://github.com/nektos/act) is used for debugging GitHub Actions.
 
+## Understanding key components
 
 ### JupyterLab
 
@@ -50,11 +53,9 @@ https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#pre
 $ jupyter server --generate-config
 ```
 
-
 ### NGINX
 
 https://hub.docker.com/_/nginx
-
 
 To get a "clean" copy fo the config file
 
@@ -66,11 +67,8 @@ $ docker cp tmp-nginx-container:/etc/nginx/nginx.conf /host/path/nginx.conf
 $ docker rm -f tmp-nginx-container
 ```
 
-
 ## Testing
 
-
 ### CI via GitHub Actions
-
 
 Debug GH Actions locally using `act` https://github.com/nektos/act

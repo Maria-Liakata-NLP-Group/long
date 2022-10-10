@@ -38,4 +38,9 @@ jobs:
       - name: Run Pre-Commit Hooks
         shell: bash
         run: |
-          pre-commit run --all-files
+          SKIP=hadolint pre-commit run --all-files
+      # Run a slightly different version of the hadolint on GH Actions
+      - name: Run Pre-Commit Hooks
+        shell: bash
+        run: |
+          pre-commit run --all-files --config .pre-commit-config-github-actions.yaml
