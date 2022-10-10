@@ -31,6 +31,15 @@ https://www.software.ac.uk/news/new-guide-how-reproducible-should-research-softw
 - LoNG is too specialised to qualify as Level-3 ("Research Software as Infrastructure").
 
 
+## Tools required
+
+To build this repo locally,it is assumed that a developer has installed:
+
+- VSCode or a comparable editor
+- Docker Desktop or Docker + docker compose
+- [`hadolint`](https://hadolint.github.io/hadolint/)
+
+
 ### JupyterLab
 
 Setup a custom jupyter_server_config.py
