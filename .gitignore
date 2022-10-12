@@ -2,3 +2,4 @@
 app/__pycache__/
 misc/figs/~$estimates-per-milestone.xlsx
 nginx/config/htpasswd.admin
+nginx/config/htpasswd_store

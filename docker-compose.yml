@@ -53,7 +53,7 @@ services:
           - webserver
     volumes:
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/config/htpasswd.admin:/etc/nginx/htpasswd.admin
+      - ./nginx/config/htpasswd_store:/etc/nginx/htpasswd_store
       # - ./nginx/config:/etc/nginx/conf.d
       - ./nginx/static:/data/www
     depends_on:

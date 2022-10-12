@@ -5,17 +5,16 @@ This assumes that LoNG has already been [installed](installation.md).
 
 ## Create a user
 
-
+Before you can start LoNG, you ***must*** create a password. On Linux/MacOS computers, you will be able to use the `htpasswd` command
 
 ```
-htpasswd -c ./nginx/config/htpasswd.admin admin
+cd /my/local/clone/long
+htpasswd -c ./nginx/config/htpasswd_store admin
 ```
 
-You will be asked to enter your password twice.
+This creates a username `admin`, You will be asked to enter your choice of password twice. If you run this command again, it will simply overwrite your old password.
 
-<-- Check what happens if you run this command twice -->
-<-- Instructions for resetting your password -->
-<-- What happens if you start LoNG without a password file? -->
+If you
 
 ## Launching LoNG
 
@@ -40,3 +39,10 @@ http://localhost/
 If everthing has worked correctly then you should see the placeholder landing page, as below:
 
 ![Image](./images/placeholder_landing_page.png)
+
+## Stopping LoNG
+
+Open your shell and navigate to the directory you installed LoNG in. Then run this command:
+```
+docker compose down
+```
