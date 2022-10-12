@@ -3,6 +3,20 @@
 This assumes that LoNG has already been [installed](installation.md).
 
 
+## Create a user
+
+
+
+```
+htpasswd -c ./nginx/config/htpasswd.admin admin
+```
+
+You will be asked to enter your password twice.
+
+<-- Check what happens if you run this command twice -->
+<-- Instructions for resetting your password -->
+<-- What happens if you start LoNG without a password file? -->
+
 ## Launching LoNG
 
 Open your shell and navigate to the directory you installed LoNG in. Then run this command:
