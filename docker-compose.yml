@@ -16,7 +16,15 @@ services:
   #     MYSQL_DB: todos
 
   dsnb:
-    image: jupyter/datascience-notebook:0fd03d9356de
+    image: jupyter/scipy-notebook
+    # container_name: jupyter
+    command: start.sh jupyter lab  --LabApp.allow_remote_access='True' --LabApp.allow_origin='*'
+    restart: always
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+
+
+    # image: jupyter/datascience-notebook:0fd03d9356de
     hostname: dsnb
     # ports:
     #   - 10001:8888
@@ -30,7 +38,11 @@ services:
       - ./jupyterlab/jupyter_server_config.py:/home/jovyan/.jupyter/jupyter_server_config.py
 
   webapp:
-    build: app/
+    build:
+      context: ./app/
+    hostname: webapp
+    ports:
+      - 5000:5000
     networks:
       internal:
         aliases:
@@ -38,9 +50,16 @@ services:
     volumes:
       - ./app:/usr/src/app
 
+  # See https://github.com/nginxinc/docker-nginx/tree/master/modules
+  # For info on custom build of nginx
   webserver:
-    image: nginx
     hostname: webserver
+
+    build:
+      context: ./nginx/docker/
+      args:
+        ENABLED_MODULES: headers-more
+    image: long-nginx
     ports:
       - 80:80
     networks:
@@ -49,6 +68,8 @@ services:
           - webserver
     volumes:
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/config/htpasswd_store:/etc/nginx/htpasswd_store
+      # - ./nginx/config:/etc/nginx/conf.d
       - ./nginx/static:/data/www
     depends_on:
       - dsnb

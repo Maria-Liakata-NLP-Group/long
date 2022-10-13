@@ -154,7 +154,7 @@
 #                      This can be set to false to prevent changing password from
 #  the UI/API.
 #  Default: True
-# c.ServerApp.allow_password_change = True
+c.ServerApp.allow_password_change = False
 
 ## Allow requests where the Host header doesn't point to a local server
 #
@@ -446,7 +446,7 @@ c.ServerApp.base_url = '/jupyter'
 #                        The string should be of the form type:salt:hashed-
 #  password.
 #  Default: ''
-# c.ServerApp.password = ''
+c.ServerApp.password = ''
 
 ## Forces users to use a password for the Jupyter server.
 #                        This is useful in a multi user environment, for instance when
@@ -551,6 +551,7 @@ c.ServerApp.port = 8888
 #  is NOT RECOMMENDED.
 #  Default: '<generated>'
 # c.ServerApp.token = '<generated>'
+c.ServerApp.token = ''
 
 ## Supply overrides for the tornado.web.Application that the Jupyter server uses.
 #  Default: {}
