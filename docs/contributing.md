@@ -79,7 +79,7 @@ In order to use additional modules with `nginx` in the docker image (specfically
 
 This means that any modules [listed here](https://hg.nginx.org/pkg-oss/file/tip) can be enabled by `ENABLED_MODULES` argument in the relevant service in the `docker-compose.yml` file.
 
-The file `nginx/docker/Dockerfile` is a direct copy from nginxinc github repo, and hence has been excepted from the pre-commit Dockerfile linting hook.
+The file `nginx/docker/Dockerfile` is a direct copy from the nginxinc github repo, and hence has been excepted from the pre-commit Dockerfile linting hook.
 
 
 ## Testing
