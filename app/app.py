@@ -2,6 +2,6 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/flask')
+@app.route('/api')
 def home():
     return 'Flask with docker!'

@@ -53,11 +53,17 @@ https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#pre
 $ jupyter server --generate-config
 ```
 
+Key runtime parameters are found here:
+```
+/home/jovyan/.local/share/jupyter/runtime
+/home/jovyan/.local/share/jupyter/runtime/jupyter_cookie_secret
+```
+
 ### NGINX
 
 https://hub.docker.com/_/nginx
 
-To get a "clean" copy fo the config file
+To get a "clean" copy from the config file
 
 (taken from the "Complex configuration" section on this page https://hub.docker.com/_/nginx )
 
@@ -66,6 +72,15 @@ $ docker run --name tmp-nginx-container -d nginx
 $ docker cp tmp-nginx-container:/etc/nginx/nginx.conf /host/path/nginx.conf
 $ docker rm -f tmp-nginx-container
 ```
+
+#### Building additional Nginx modules
+
+In order to use additional modules with `nginx` in the docker image (specfically `headers-more`), the [instructions from the nginxinc github repo](https://github.com/nginxinc/docker-nginx/blob/master/modules/README.md) are followed.
+
+This means that any modules [listed here](https://hg.nginx.org/pkg-oss/file/tip) can be enabled by `ENABLED_MODULES` argument in the relevant service in the `docker-compose.yml` file.
+
+The file `nginx/docker/Dockerfile` is a direct copy from nginxinc github repo, and hence has been excepted from the pre-commit Dockerfile linting hook.
+
 
 ## Testing
 

@@ -42,9 +42,16 @@ services:
     volumes:
       - ./app:/usr/src/app
 
+  # See https://github.com/nginxinc/docker-nginx/tree/master/modules
+  # For info on custom build of nginx
   webserver:
-    image: nginx
     hostname: webserver
+
+    build:
+      context: ./nginx/docker/
+      args:
+        ENABLED_MODULES: headers-more
+    image: long-nginx
     ports:
       - 80:80
     networks:

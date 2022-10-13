@@ -7,3 +7,9 @@
     rev: v2.10.0
     hooks:
       - id: hadolint-docker
+        # The file `nginx/docker/Dockerfile` is a direct copy
+        # from the nginxinc github repo, and hence has been excepted
+        # from the pre-commit Dockerfile linting hook.
+        # See docs/contributing.md#building-additional-nginx-modules
+        # for more details
+        exclude: nginx/docker/Dockerfile
