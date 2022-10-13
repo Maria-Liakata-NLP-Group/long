@@ -59,6 +59,14 @@ Key runtime parameters are found here:
 /home/jovyan/.local/share/jupyter/runtime/jupyter_cookie_secret
 ```
 
+#### Configuring the reverse proxy to work with JupyterLab
+
+In order for Jupyter to work behind the Nginx reverse proxy, the configuation has been adjusted to enable websockets connections. For details see these references:
+
+* https://jupyter-server.readthedocs.io/en/latest/operators/security.html
+* https://nedjalkov-ivan-j.medium.com/jupyter-lab-behind-a-nginx-reverse-proxy-the-docker-way-8f8d825a2336
+
+
 ### NGINX
 
 https://hub.docker.com/_/nginx
