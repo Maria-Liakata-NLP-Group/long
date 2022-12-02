@@ -1,6 +1,4 @@
-
-
-class Source():
+class Source:
     # self.name = ""
     # self.user_ids = []
     # self.cmoc_methods = [] # List[str] of method_ids
@@ -15,7 +13,7 @@ class Source():
 
     def get_user_df(self, user_id: str):
         cmocs_as_df = self.data_daily_interactions[user_id].copy()
-    
+
         for method_name in self.cmoc_methods:
             cmocs_as_df = self._add_cmoc_cols(cmocs_as_df, method_name, user_id)
 
@@ -24,7 +22,6 @@ class Source():
     def cmoc_method_friendly_names(self, method_id: str) -> str:
         return method_id.replace("_", " ").title()
 
-
     def _add_cmoc_cols(self, user_df, method_name: str, user_id):
         user_df[method_name] = None
 
@@ -32,7 +29,7 @@ class Source():
         sample_tl_cmocs = sample_cmocs[user_id]
 
         user_df[method_name] = user_df.apply(
-            lambda x: 1 if (x.name.date() in sample_tl_cmocs) else None,
-            axis=1)
+            lambda x: 1 if (x.name.date() in sample_tl_cmocs) else None, axis=1
+        )
 
         return user_df

@@ -1,14 +1,14 @@
-from termcolor import colored, cprint
 from pyfiglet import Figlet
 from rich import print as rprint
+from rich.console import Console
 from rich.markdown import Markdown
 from rich.table import Table
-from rich.console import Console
+from termcolor import colored, cprint
 
 f = Figlet(font="big")
 
 title = ""
-for ln in f.renderText('LoNG').splitlines():
+for ln in f.renderText("LoNG").splitlines():
     print(f"ln.strip()= -->{ln.strip()}<--")
     if ln.strip():
         if title:
