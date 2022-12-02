@@ -1,0 +1,5 @@
+plotly~=5.11
+dash~=2.7
+icecream
+distinctipy
+pandas
