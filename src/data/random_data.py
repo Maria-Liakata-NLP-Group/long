@@ -11,7 +11,7 @@ data_daily_interactions = {}
 date_range = pd.date_range(start="2017-01-01", end="2021-01-01")
 ic(len(date_range))
 
-all_cmocs: Dict[str, Dict[str, List]] = {}
+all_cmocs: Dict[str, Dict[str, List[pd.Timestamp]]] = {}
 
 cmoc_random_values = [3, 30, 100]
 

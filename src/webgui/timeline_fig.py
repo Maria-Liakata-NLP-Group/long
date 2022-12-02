@@ -161,7 +161,7 @@ def _apply_cmoc(fig, user_df, method_name, color):
         # connectgaps=False,
         # error_x=width_as_error,
         # error_y=hight_as_error,
-        width=2.0 * (24 * 60 * 60 * 1000),
+        width=1.5 * (24 * 60 * 60 * 1000),
         xperiod=(24 * 60 * 60 * 1000),
         visible=True if method_name == long_data.cmoc_methods[0] else "legendonly",
         showlegend=True,
