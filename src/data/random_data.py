@@ -9,7 +9,7 @@ from .source import Source
 
 data_daily_interactions = {}
 date_range = pd.date_range(start="2017-01-01", end="2021-01-01")
-ic(len(date_range))
+# ic(len(date_range))
 
 all_cmocs: Dict[str, Dict[str, List[pd.Timestamp]]] = {}
 
@@ -41,8 +41,8 @@ for user_num in range(12):
         gen_cmocs = random.choices(date_range, weights=posts, k=num_cmoc)
 
         cmoc_lst = [_date for _date in gen_cmocs]
-        ic(user_id)
-        ic(cmoc_lst)
+        # ic(user_id)
+        # ic(cmoc_lst)
 
         # user_cmocs = {}
         # user_cmocs[user_id] = gen_cmocs
