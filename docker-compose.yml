@@ -30,13 +30,13 @@ services:
       - ./jupyterlab/jupyter_server_config.py:/home/jovyan/.jupyter/jupyter_server_config.py
 
   webapp:
-    build: app/
+    build: src/
     networks:
       internal:
         aliases:
           - webapp
     volumes:
-      - ./app:/usr/src/app
+      - ./src:/usr/src/app
 
   webserver:
     image: nginx

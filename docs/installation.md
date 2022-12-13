@@ -3,21 +3,28 @@
 
 ## Supported Configurations
 
-At present LoNG is only supported as a standalone tool to be used on a researcher's personal computer.
+At present LoNG is only supported as a standalone tool to be used on a researcher's personal computer. There are two possible ways to install and operate it.
 
-In future it may be supported when installed as a shared tool for a research team. However at present neither the security nor the stability of this configuration has been tested.
+- Installed as a standalone python package, which can be run as a local webapp or as imported into a Jupyter notebook.
+- Installed as a collection of docker containers (wrapped up by docker-compose), which includes a webapp and an embedded Jupyter notebook server
+
+In future, it may be supported when installed as a shared tool for a research team. However at present neither the security nor the stability of this configuration has been tested.
 
 ## Pre-requisites
 
 The following software must be installed, prior to installing LoNG:
 
-* [Docker Desktop](https://docs.docker.com/engine/install/). Both The Docker enginee and Docker Compose are required - both of these tools are included in Docker Desktop.
 * A Git client. The instructions below assumes the default command line [git client](https://git-scm.com/downloads).
+* A python 3.10 instance (either as a virtualenv or a Conda environment).
+* Google Chrome. (Other browsers are untested. There is a known problem using Firefox)
+* (For the docker installation only) [Docker Desktop](https://docs.docker.com/engine/install/). Both The Docker engine and Docker Compose are required - both of these tools are included in Docker Desktop.
 
-* LoNG _should_ work on any common operating system (Windows, MacOS and Linux), though this has not yet been fully tested. [Feedback is welcome](https://github.com/Maria-Liakata-NLP-Group/long/issues/new).
+LoNG _should_ work on any common operating system (Windows, MacOS and Linux), though this has not yet been fully tested. [Feedback is welcome](https://github.com/Maria-Liakata-NLP-Group/long/issues/new).
 
 
 ## Installation
+
+At present installation is only possible from the source code. There are no binary packages available.
 
 ### Clone the repository
 
@@ -39,14 +46,6 @@ This will create a directory called `long`. Change directory into this:
 
 ```
 cd long
-```
-
-### Pull the Docker images (optional)
-
-The first time LoNG is run, it will download some Docker images. To force the download (and cache) the images, without starting LoNG, use the following command.
-
-```
-docker compose pull .
 ```
 
 -- END --
