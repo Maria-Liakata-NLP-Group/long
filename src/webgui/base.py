@@ -21,13 +21,13 @@ app = Dash(
     __name__,
     title="LoNG",
     external_stylesheets=external_stylesheets,
-    url_base_pathname="/app/",
 )
 
 styles = {"pre": {"border": "thin lightgrey solid", "overflowX": "scroll"}}
 
+# Hardcoded data source selection here
 long_data = catalogue.get_source("random_data")
-# user_df = long_data.get_user_df(361767)
+# long_data = catalogue.get_source("talklife-aggregated")
 
 
 @app.callback(

@@ -3,3 +3,4 @@ dash~=2.7
 icecream
 distinctipy
 pandas
+gunicorn
