@@ -10,8 +10,10 @@ from plotly.subplots import make_subplots
 
 from data import catalogue
 
-# long_data = catalogue.get_all_sources()[0]
-long_data = catalogue.get_source("random_data")
+# Hardcoded data source selection here
+# long_data = catalogue.get_source("random_data")
+long_data = catalogue.get_source("talklife-aggregated")
+
 
 # This is used to prevent the default plotly controls from appearing in the top-right corner of the figure.
 fig_config = {

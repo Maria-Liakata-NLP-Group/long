@@ -11,8 +11,10 @@ from dash import dcc, html
 
 from data import catalogue
 
-# long_data = catalogue.get_all_sources()[0]
-long_data = catalogue.get_source("random_data")
+# Hardcoded data source selection here
+# long_data = catalogue.get_source("random_data")
+long_data = catalogue.get_source("talklife-aggregated")
+
 
 
 def create_user_id_dropdown():

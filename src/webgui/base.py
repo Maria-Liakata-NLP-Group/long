@@ -26,8 +26,8 @@ app = Dash(
 styles = {"pre": {"border": "thin lightgrey solid", "overflowX": "scroll"}}
 
 # Hardcoded data source selection here
-long_data = catalogue.get_source("random_data")
-# long_data = catalogue.get_source("talklife-aggregated")
+# long_data = catalogue.get_source("random_data")
+long_data = catalogue.get_source("talklife-aggregated")
 
 
 @app.callback(

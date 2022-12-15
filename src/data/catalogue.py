@@ -1,14 +1,26 @@
 from .random_data import random_data
 from .source import Source
+import sys
+from icecream import ic
+from pathlib import Path
 
 _available_sources = {}
 
 try:
-    import tl_generation_wrapper as tl
+    TL_GENERATION_PATH = Path("../anthony/timeline_generation").absolute().resolve()
 
-    _available_sources[tl.talk_life_aggregate.name] = tl.talk_life_aggregate
+    ic(TL_GENERATION_PATH)
+    sys.path.append(str(TL_GENERATION_PATH))
+
+
+    from .tl_generation_wrapper import talk_life_aggregate
+
+    _available_sources[talk_life_aggregate.name] = talk_life_aggregate
 except ImportError:
-    pass
+    print("!!!!!!!!!!!")
+    print("Unable to load Talklife data")
+    print(sys.path)
+    print("!!!!!!!!!!!")
 
 # Ensure that there is at least one data source
 _available_sources[random_data.name] = random_data
