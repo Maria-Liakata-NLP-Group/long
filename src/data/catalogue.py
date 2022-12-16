@@ -16,11 +16,13 @@ try:
     from .tl_generation_wrapper import talk_life_aggregate
 
     _available_sources[talk_life_aggregate.name] = talk_life_aggregate
-except ImportError:
+except ImportError as ie:
     print("!!!!!!!!!!!")
     print("Unable to load Talklife data")
     print(sys.path)
+    print(ie)
     print("!!!!!!!!!!!")
+
 
 # Ensure that there is at least one data source
 _available_sources[random_data.name] = random_data

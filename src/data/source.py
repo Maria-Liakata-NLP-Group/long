@@ -20,6 +20,13 @@ class Source:
         return cmocs_as_df
 
     def cmoc_method_friendly_names(self, method_id: str) -> str:
+        """
+        Maps the method_id (the internal identifier for the method) to a human readable name.
+
+        params: method_id: either a single method_id str.
+    
+        returns: The method_id with "_" char replaced by spaces and the str switched to Title case.
+        """
         return method_id.replace("_", " ").title()
 
     def _add_cmoc_cols(self, user_df, method_name: str, user_id):

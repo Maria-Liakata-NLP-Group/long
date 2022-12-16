@@ -26,6 +26,8 @@ To load Talklife data using the `timeline_selection` repo:
 
 1. Install LoNG, [as described elsewhere](installation.md).
 1. Clone  `timeline_selection` locally on your system.
+1. If necessary install any additional requirements for `timeline_selection` in your local environment. These include:
+    `matplotlib`
 1. As required, adjust paths to the pickle files in the `timeline_selection` code.
 1. In `src/data/tl_generation_wrapper.py` update the variable `TL_GENERATION_PATH` with either the absolute or relative path to root of the `timeline_selection` clone.
 
