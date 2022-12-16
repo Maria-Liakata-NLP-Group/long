@@ -13,17 +13,24 @@ from data import catalogue
 
 # Hardcoded data source selection here
 # long_data = catalogue.get_source("random_data")
-long_data = catalogue.get_source("talklife-aggregated")
+# long_data = catalogue.get_source("talklife-aggregated")
 
 
 
-def create_user_id_dropdown():
+def create_user_id_dropdown(datasource_name: str):
+
+    if not datasource_name:
+        datasource_name = [*catalogue.list_source_names()][0]
+
+    data_source = catalogue.get_source(datasource_name)
+
     return dcc.Dropdown(
         id="user_id_dropdown",
-        options=long_data.user_ids,
-        value=long_data.user_ids[0],
+        options=data_source.user_ids,
+        value=data_source.user_ids[0],
         clearable=False,
     )
+    # return data_source.user_ids #, data_source.user_ids[0]
 
 
 def create_cmoc_options_list():

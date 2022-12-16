@@ -1,6 +1,7 @@
 from dash import Dash, Input, Output, dcc, html
 from icecream import ic
 from .timeline_fig import create_cmoc_options_list
+from data import catalogue
 
 styles = {
     "pre": {"border": "thin lightgrey solid", "overflowX": "scroll"},
@@ -31,9 +32,18 @@ header = html.Div(
     ]
 )
 
+
+
 left_menu = html.Div(
     [
-        html.H4("Timeline View"),
+        html.H4("Select Dataset"),
+        dcc.Dropdown(
+            id="datasource_id_dropdown",
+            options=[*catalogue.list_source_names()],
+            value=[*catalogue.list_source_names()][0],
+            clearable=False,
+        ),
+        html.H4("View"),
         html.Br(),
         html.A("List Users"),
         html.Br(),

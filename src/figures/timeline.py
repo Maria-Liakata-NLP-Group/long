@@ -7,12 +7,13 @@ from dash import html, dcc
 from icecream import ic
 from plotly.graph_objects import scatter
 from plotly.subplots import make_subplots
+from data.source import Source
 
 from data import catalogue
 
 # Hardcoded data source selection here
 # long_data = catalogue.get_source("random_data")
-long_data = catalogue.get_source("talklife-aggregated")
+# long_data = catalogue.get_source("talklife-aggregated")
 
 
 # This is used to prevent the default plotly controls from appearing in the top-right corner of the figure.
@@ -24,16 +25,16 @@ fig_config = {
 }
 
 
-def _get_cmoc_colors():
+def _get_cmoc_colors(datasource: Source):
     # rng is a random seed. We fix it here so that the same set of colors will be produced on each call.
     # See https://distinctipy.readthedocs.io/en/latest/api.html#distinctipy.distinctipy.get_colors
     return distinctipy.get_colors(
-        len(long_data.cmoc_methods), pastel_factor=0.0, rng=123
+        len(datasource.cmoc_methods), pastel_factor=0.0, rng=123
     )
 
 
 def get_graph(
-    user_df, selected_cmocs, cmoc_options_state, radius_width, radius_opacity, xrange
+    datasource: Source, user_df, selected_cmocs, cmoc_options_state, radius_width, radius_opacity, xrange
 ):
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
@@ -71,8 +72,8 @@ def get_graph(
         title="number of posts per day",
     )
 
-    cmoc_colors = _get_cmoc_colors()
-    for method_name in long_data.cmoc_methods:
+    cmoc_colors = _get_cmoc_colors(datasource)
+    for method_name in datasource.cmoc_methods:
         visible = True if method_name in selected_cmocs else "legendonly"
 
         cmoc_color = f"rgb{distinctipy.get_rgb256(cmoc_colors.pop())}"
@@ -80,6 +81,7 @@ def get_graph(
             fig,
             user_df,
             method_name,
+            friendly_name=datasource.cmoc_method_friendly_names(method_name),
             color=cmoc_color,
             visible=visible,
             show_points=show_points,
@@ -125,12 +127,16 @@ def _apply_timeline(fig):
     pass
 
 
-def get_cmoc_checklist(cmoc_methods, cmoc_options_state):
-    cmoc_colors = _get_cmoc_colors()
+def get_cmoc_checklist(datasource: Source, cmoc_options_state):
+    cmoc_colors = _get_cmoc_colors(datasource)
     items = []
-    for method_name in cmoc_methods:
+    for method_name in datasource.cmoc_methods:
         cmoc_color = f"rgb{distinctipy.get_rgb256(cmoc_colors.pop())}"
-        items.append(_create_cmoc_checklist_item(method_name, color=cmoc_color))
+        items.append(_create_cmoc_checklist_item(
+            method_name,
+            datasource.cmoc_method_friendly_names(method_name),
+            color=cmoc_color)
+        )
 
     return dcc.Checklist(
         id={"type": "cmoc_visible_checklist", "name": "cmoc_visible_selection"},
@@ -140,7 +146,7 @@ def get_cmoc_checklist(cmoc_methods, cmoc_options_state):
     )
 
 
-def _create_cmoc_checklist_item(method_name, color):
+def _create_cmoc_checklist_item(method_name, friendly_name, color):
     #   &#x26AA; ==> white circle
     # 25A0 black square
 
@@ -157,7 +163,7 @@ def _create_cmoc_checklist_item(method_name, color):
             [
                 # 25A0 black square
                 html.Span("■", style={"color": color, "font-size": 20}),
-                f" {long_data.cmoc_method_friendly_names(method_name)}",
+                f" {friendly_name}",
             ]
         ),
         "value": method_name,
@@ -168,6 +174,7 @@ def _apply_cmoc(
     fig,
     user_df,
     method_name,
+    friendly_name,
     color,
     visible,
     show_points: bool,
@@ -212,7 +219,8 @@ def _apply_cmoc(
     cmoc_scatter = go.Scatter(
         mode="markers",
         # name="CMOCs",
-        name=long_data.cmoc_method_friendly_names(method_name),
+        # name=long_data.cmoc_method_friendly_names(method_name),
+        name=friendly_name,
         x=user_df.index,
         # y=user_df["cmoc"],
         y=user_df[method_name],
@@ -231,7 +239,8 @@ def _apply_cmoc(
     cmoc_bar = go.Bar(
         # mode="markers",
         # name="CMOCs",
-        name=long_data.cmoc_method_friendly_names(method_name),
+        # name=long_data.cmoc_method_friendly_names(method_name),
+        name=friendly_name,
         x=user_df.index,
         # y=user_df["cmoc"],
         y=user_df[method_name],
