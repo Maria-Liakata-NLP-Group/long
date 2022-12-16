@@ -34,7 +34,13 @@ def _get_cmoc_colors(datasource: Source):
 
 
 def get_graph(
-    datasource: Source, user_df, selected_cmocs, cmoc_options_state, radius_width, radius_opacity, xrange
+    datasource: Source,
+    user_df,
+    selected_cmocs,
+    cmoc_options_state,
+    radius_width,
+    radius_opacity,
+    xrange,
 ):
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
@@ -132,10 +138,12 @@ def get_cmoc_checklist(datasource: Source, cmoc_options_state):
     items = []
     for method_name in datasource.cmoc_methods:
         cmoc_color = f"rgb{distinctipy.get_rgb256(cmoc_colors.pop())}"
-        items.append(_create_cmoc_checklist_item(
-            method_name,
-            datasource.cmoc_method_friendly_names(method_name),
-            color=cmoc_color)
+        items.append(
+            _create_cmoc_checklist_item(
+                method_name,
+                datasource.cmoc_method_friendly_names(method_name),
+                color=cmoc_color,
+            )
         )
 
     return dcc.Checklist(

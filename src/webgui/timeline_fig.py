@@ -16,7 +16,6 @@ from data import catalogue
 # long_data = catalogue.get_source("talklife-aggregated")
 
 
-
 def create_user_id_dropdown(datasource_name: str):
 
     if not datasource_name:

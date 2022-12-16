@@ -33,7 +33,6 @@ header = html.Div(
 )
 
 
-
 left_menu = html.Div(
     [
         html.H4("Select Dataset"),

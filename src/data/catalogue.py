@@ -12,7 +12,6 @@ try:
     ic(TL_GENERATION_PATH)
     sys.path.append(str(TL_GENERATION_PATH))
 
-
     from .tl_generation_wrapper import talk_life_aggregate
 
     _available_sources[talk_life_aggregate.name] = talk_life_aggregate

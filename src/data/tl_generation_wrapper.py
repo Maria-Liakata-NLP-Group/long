@@ -13,6 +13,7 @@ sys.path.append(str(TL_GENERATION_PATH))
 try:
     from utils.io.my_pickler import my_pickler
     from utils.visualize.plot_results import method_name_mapper
+
     data_daily_interactions = my_pickler(
         "i", "observed_data_daily_interactions", folder="datasets"
     )

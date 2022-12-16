@@ -21,7 +21,7 @@ app = Dash(
     __name__,
     title="LoNG",
     external_stylesheets=external_stylesheets,
-    suppress_callback_exceptions=True
+    suppress_callback_exceptions=True,
 )
 
 styles = {"pre": {"border": "thin lightgrey solid", "overflowX": "scroll"}}
@@ -34,12 +34,13 @@ styles = {"pre": {"border": "thin lightgrey solid", "overflowX": "scroll"}}
 @app.callback(
     Output("user_id_dropdown_container", "children"),
     # Output("user_id_dropdown", "select"),
-    Input("datasource_id_dropdown", "value")
+    Input("datasource_id_dropdown", "value"),
 )
 def update_user_id_dropdown(datasource_name):
     ic(datasource_name)
 
     return create_user_id_dropdown(datasource_name)
+
 
 @app.callback(
     Output("main_graph", "figure"),
@@ -176,9 +177,7 @@ app.layout = html.Div(
                     [
                         html.P("Select User ID"),
                         # create_user_id_dropdown([*catalogue.list_source_names()][0]),
-                        html.Div(
-                            id="user_id_dropdown_container"
-                        ),
+                        html.Div(id="user_id_dropdown_container"),
                         # dcc.Dropdown(
                         #     id="user_id_dropdown",
                         #     clearable=False,
