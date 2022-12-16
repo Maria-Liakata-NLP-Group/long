@@ -4,13 +4,8 @@ Currently, there is no method to add data from within LoNG. Data must be program
 
 > ** All the solutions on this page are imperfect and are WIP. They will likely be revised later in the project**
 
-The webgui is currently hardcoded to load the Default Random Demo data. If the Talklife data is available, this behaviour can be changed in `src/webgui/base.py`, by adjusting these two lines:
+The webgui has a dropdown menu in then top left that allows the user to switch between available datasets. If the Talklife data is available, it should show by default. If not the Radom Demo data will be displayed.
 
-```
-# Hardcoded data source selection here
-long_data = catalogue.get_source("random_data")
-# long_data = catalogue.get_source("talklife-aggregated")
-```
 
 ### Default Random Demo data
 
