@@ -21,18 +21,31 @@ app = Dash(
     __name__,
     title="LoNG",
     external_stylesheets=external_stylesheets,
+    suppress_callback_exceptions=True,
 )
 
 styles = {"pre": {"border": "thin lightgrey solid", "overflowX": "scroll"}}
 
 # Hardcoded data source selection here
-long_data = catalogue.get_source("random_data")
+# long_data = catalogue.get_source("random_data")
 # long_data = catalogue.get_source("talklife-aggregated")
+
+
+@app.callback(
+    Output("user_id_dropdown_container", "children"),
+    # Output("user_id_dropdown", "select"),
+    Input("datasource_id_dropdown", "value"),
+)
+def update_user_id_dropdown(datasource_name):
+    ic(datasource_name)
+
+    return create_user_id_dropdown(datasource_name)
 
 
 @app.callback(
     Output("main_graph", "figure"),
     Input("user_id_dropdown", "value"),
+    Input("datasource_id_dropdown", "value"),
     Input({"type": "cmoc_visible_checklist", "name": ALL}, "value"),
     Input("cmoc_options_checklist", "value"),
     Input("cmoc_options_radius_width", "value"),
@@ -41,6 +54,7 @@ long_data = catalogue.get_source("random_data")
 )
 def get_user_tl_graph(
     user_id,
+    datasource_name,
     cmoc_selection,
     cmoc_options_state,
     radius_width,
@@ -67,8 +81,11 @@ def get_user_tl_graph(
     ic(xrange)
     ic(selected_cmocs)
 
-    user_df = long_data.get_user_df(user_id)
+    datasource = catalogue.get_source(datasource_name)
+
+    user_df = datasource.get_user_df(user_id)
     return get_graph(
+        datasource,
         user_df,
         selected_cmocs,
         cmoc_options_state,
@@ -81,9 +98,10 @@ def get_user_tl_graph(
 @app.callback(
     Output("legend_cmocs_container", "children"),
     Input("user_id_dropdown", "value"),
+    State("datasource_id_dropdown", "value"),
     State("legend_cmocs_container", "children"),
 )
-def get_tl_cmoc_checklist(user_id, cmoc_selection):
+def get_tl_cmoc_checklist(user_id, datasource_name, cmoc_selection):
     # ic(cmoc_options_state)
     # ic(cmoc_selection)
     # ic(radius_width)
@@ -94,8 +112,9 @@ def get_tl_cmoc_checklist(user_id, cmoc_selection):
         selected_cmocs = cmoc_selection.get("props", {}).get("value", [])
 
     # ic(selected_cmocs)
+    datasource = catalogue.get_source(datasource_name)
 
-    return get_cmoc_checklist(long_data.cmoc_methods, selected_cmocs)
+    return get_cmoc_checklist(datasource, selected_cmocs)
 
 
 def filter_legend_state_changes(cmoc_selection, cmoc_options_state):
@@ -157,12 +176,17 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.P("Select User ID"),
-                        create_user_id_dropdown(),
+                        # create_user_id_dropdown([*catalogue.list_source_names()][0]),
+                        html.Div(id="user_id_dropdown_container"),
+                        # dcc.Dropdown(
+                        #     id="user_id_dropdown",
+                        #     clearable=False,
+                        # ),
                         dcc.Graph(
                             id="main_graph",
-                            figure=get_user_tl_graph(
-                                long_data.user_ids[0], None, None, None, None, None
-                            ),
+                            # figure=get_user_tl_graph(
+                            #     long_data.user_ids[0], None, None, None, None, None
+                            # ),
                             config=fig_config,
                         ),
                         html.Div(

@@ -4,13 +4,8 @@ Currently, there is no method to add data from within LoNG. Data must be program
 
 > ** All the solutions on this page are imperfect and are WIP. They will likely be revised later in the project**
 
-The webgui is currently hardcoded to load the Default Random Demo data. If the Talklife data is available, this behaviour can be changed in `src/webgui/base.py`, by adjusting these two lines:
+The webgui has a dropdown menu in then top left that allows the user to switch between available datasets. If the Talklife data is available, it should show by default. If not the Radom Demo data will be displayed.
 
-```
-# Hardcoded data source selection here
-long_data = catalogue.get_source("random_data")
-# long_data = catalogue.get_source("talklife-aggregated")
-```
 
 ### Default Random Demo data
 
@@ -26,6 +21,8 @@ To load Talklife data using the `timeline_selection` repo:
 
 1. Install LoNG, [as described elsewhere](installation.md).
 1. Clone  `timeline_selection` locally on your system.
+1. If necessary install any additional requirements for `timeline_selection` in your local environment. These include:
+    `matplotlib`
 1. As required, adjust paths to the pickle files in the `timeline_selection` code.
 1. In `src/data/tl_generation_wrapper.py` update the variable `TL_GENERATION_PATH` with either the absolute or relative path to root of the `timeline_selection` clone.
 
