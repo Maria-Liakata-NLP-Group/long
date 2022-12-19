@@ -8,6 +8,9 @@ from icecream import ic
 from plotly.graph_objects import scatter
 from plotly.subplots import make_subplots
 from data.source import Source
+import plotly.express as px
+from pandas import DataFrame
+from numpy import NaN
 
 from data import catalogue
 
@@ -43,7 +46,13 @@ def get_graph(
     xrange,
 ):
     # Create figure with secondary y-axis
-    fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        specs=[[{}], [{"secondary_y": True}]],
+        shared_xaxes=True,
+        row_heights=[0.3, 0.7],
+    )
 
     # Set some defaults
     radius_width = radius_width if radius_width else 7
@@ -76,6 +85,8 @@ def get_graph(
         secondary_y=False,
         range=[0, max(user_df["posts"])],
         title="number of posts per day",
+        row=2,
+        col=1,
     )
 
     cmoc_colors = _get_cmoc_colors(datasource)
@@ -96,6 +107,8 @@ def get_graph(
             radius_opacity=radius_opacity,
         )
 
+    fig = _create_rug_plot(fig, datasource, user_df)
+
     fig.add_trace(
         go.Scatter(
             mode="lines",
@@ -105,6 +118,8 @@ def get_graph(
             xperiod=(24 * 60 * 60 * 1000),
         ),
         secondary_y=False,
+        row=2,
+        col=1,
     )
 
     fig.update_yaxes(
@@ -115,6 +130,8 @@ def get_graph(
         range=[0, 1],
         visible=False,
         secondary_y=True,
+        row=2,
+        col=1,
     )
 
     fig.update_layout(
@@ -266,20 +283,41 @@ def _apply_cmoc(
         showlegend=True,
     )
 
+    # rug_df = user_df.copy()
+    # rug_df = rug_df[rug_df[method_name]>0]
+    # # ic(rug_df.head(10))
+    # index_value = ic(list(user_df.columns).index(method_name))
+    # rug_df = rug_df.apply(lambda x: index_value if x[method_name] else None, axis=1)
+    # ic(rug_df.head(10))
+
+    # cmoc_rug_fig = px.scatter(
+    #     rug_df,
+    #     x=rug_df.index,
+    #     # y=method_name,
+    #     # markers=True, lines=False,
+    #     marginal_x="rug"
+    # )
+
+    # ic(cmoc_rug_fig)
+
+    # fig.add_trace(cmoc_rug_fig.data[1], row=1, col=1)
+    # fig.add_trace(cmoc_rug_fig.data[2], row=1, col=1)
+
     # ic(cmoc_scatter)
 
     if show_radius:
-        fig.add_trace(cmoc_bar, secondary_y=True)
+        fig.add_trace(cmoc_bar, secondary_y=True, row=2, col=1)
     if show_points:
-        fig.add_trace(cmoc_scatter, secondary_y=True)
+        fig.add_trace(cmoc_scatter, secondary_y=True, row=2, col=1)
 
     return fig
 
 
 def _apply_rangeslider(fig):
+
     # Add range slider
     fig.update_layout(
-        xaxis=dict(
+        xaxis2=dict(
             rangeselector=dict(
                 buttons=list(
                     [
@@ -295,5 +333,85 @@ def _apply_rangeslider(fig):
             type="date",
         )
     )
+
+    return fig
+
+
+def _create_rug_plot(fig, datasource: Source, user_df):
+
+    # fig,
+    # user_df,
+    # method_name,
+    # friendly_name,
+    # color,
+    # visible,
+    # show_points: bool,
+    # show_radius: bool,
+    # radius,
+    # radius_opacity,
+
+    # datasource: Source,
+    # user_df,
+    # selected_cmocs,
+    # cmoc_options_state,
+    # radius_width,
+    # radius_opacity,
+    # xrange,
+
+    rug_df = user_df.copy()
+    ic(len(rug_df))
+    # ic(rug_df.head(5))
+
+    # rug_df = rug_df[rug_df[method_name]>0]
+
+    for method_name in datasource.cmoc_methods:
+
+        # ic(rug_df.head(10))
+        index_value = ic(list(user_df.columns).index(method_name))
+        rug_df[method_name] = rug_df.apply(
+            (lambda x: method_name if x[method_name] > 0 else NaN), axis=1
+        )
+
+    # ic(rug_df.head(100))
+
+    melt_df = rug_df.melt(id_vars=["posts"], var_name="CMoCs", ignore_index=False)
+
+    melt_df = melt_df.dropna(how="any")
+    # ic(melt_df)
+
+    ic(melt_df.describe(include="all"))
+
+    cmoc_rug_fig = px.scatter(
+        melt_df,
+        x=melt_df.index,
+        y=melt_df["posts"],
+        color="CMoCs",
+        # markers=True, lines=False,
+        marginal_x="rug",
+        render_mode="line",
+    )
+
+    # # ic(user_df.columns)
+    # # ic(user_df[1:10])
+    # cmoc_rug_fig = px.scatter(
+    #     user_df[1:100],
+    #     x=user_df[1:100].index,
+    #     # y=user_df[method_name],
+    #     # markers=True, lines=False,
+    #     marginal_x="rug"
+    # )
+
+    for d in cmoc_rug_fig.data:
+        ic(type(d), isinstance(d, go.Box))
+        if isinstance(d, go.Box):
+            fig.add_trace(d, row=1, col=1)
+
+    # ic(len(cmoc_rug_fig.data))
+
+    # ic(type(cmoc_rug_fig.data[1]))
+    # fig.add_trace(cmoc_rug_fig.data[1], row=1, col=1)
+    # # ic(fig)
+    # fig.add_trace(cmoc_rug_fig.data[3], row=1, col=1)
+    # fig.add_trace(cmoc_rug_fig.data[5], row=1, col=1)
 
     return fig
