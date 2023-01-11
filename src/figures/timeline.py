@@ -51,7 +51,7 @@ def get_graph(
         cols=1,
         specs=[[{}], [{"secondary_y": True}]],
         shared_xaxes=True,
-        row_heights=[0.3, 0.7],
+        row_heights=[0.25, 0.75],
     )
 
     # Set some defaults
@@ -135,7 +135,7 @@ def get_graph(
     )
 
     fig.update_layout(
-        height=600,
+        height=800,
         modebar_orientation="v",
         modebar_activecolor="green",
         showlegend=False,
@@ -323,7 +323,6 @@ def _apply_rangeslider(fig):
                     [
                         dict(count=1, label="1m", step="month", stepmode="backward"),
                         dict(count=6, label="6m", step="month", stepmode="backward"),
-                        dict(count=1, label="YTD", step="year", stepmode="todate"),
                         dict(count=1, label="1y", step="year", stepmode="backward"),
                         dict(step="all"),
                     ]
@@ -403,6 +402,7 @@ def _create_rug_plot(fig, datasource: Source, user_df):
 
     for d in cmoc_rug_fig.data:
         ic(type(d), isinstance(d, go.Box))
+        ic(d)
         if isinstance(d, go.Box):
             fig.add_trace(d, row=1, col=1)
 
