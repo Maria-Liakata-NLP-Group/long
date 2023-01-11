@@ -153,6 +153,7 @@ def _apply_timeline(fig):
 def get_cmoc_checklist(datasource: Source, cmoc_options_state):
     cmoc_colors = _get_cmoc_colors(datasource)
     items = []
+    ic(datasource.cmoc_methods)
     for method_name in datasource.cmoc_methods:
         cmoc_color = f"rgb{distinctipy.get_rgb256(cmoc_colors.pop())}"
         items.append(
@@ -337,38 +338,22 @@ def _apply_rangeslider(fig):
 
 
 def _create_rug_plot(fig, datasource: Source, user_df):
-
-    # fig,
-    # user_df,
-    # method_name,
-    # friendly_name,
-    # color,
-    # visible,
-    # show_points: bool,
-    # show_radius: bool,
-    # radius,
-    # radius_opacity,
-
-    # datasource: Source,
-    # user_df,
-    # selected_cmocs,
-    # cmoc_options_state,
-    # radius_width,
-    # radius_opacity,
-    # xrange,
-
+    """
+    See https://stackoverflow.com/questions/70952672/plotly-plot-with-multiple-marginal
+    and the answer https://stackoverflow.com/a/70965954/3837936
+    for the general approach in this method
+    """
     rug_df = user_df.copy()
-    ic(len(rug_df))
-    # ic(rug_df.head(5))
-
-    # rug_df = rug_df[rug_df[method_name]>0]
+    # ic(len(rug_df))
 
     for method_name in datasource.cmoc_methods:
 
         # ic(rug_df.head(10))
-        index_value = ic(list(user_df.columns).index(method_name))
+        # index_value = ic(list(user_df.columns).index(method_name))
+        # ic(user_df.columns)
         rug_df[method_name] = rug_df.apply(
-            (lambda x: method_name if x[method_name] > 0 else NaN), axis=1
+            (lambda x: method_name if x[method_name] and x[method_name] > 0 else NaN),
+            axis=1,
         )
 
     # ic(rug_df.head(100))
@@ -378,7 +363,7 @@ def _create_rug_plot(fig, datasource: Source, user_df):
     melt_df = melt_df.dropna(how="any")
     # ic(melt_df)
 
-    ic(melt_df.describe(include="all"))
+    # ic(melt_df.describe(include="all"))
 
     cmoc_rug_fig = px.scatter(
         melt_df,
@@ -390,28 +375,17 @@ def _create_rug_plot(fig, datasource: Source, user_df):
         render_mode="line",
     )
 
-    # # ic(user_df.columns)
-    # # ic(user_df[1:10])
-    # cmoc_rug_fig = px.scatter(
-    #     user_df[1:100],
-    #     x=user_df[1:100].index,
-    #     # y=user_df[method_name],
-    #     # markers=True, lines=False,
-    #     marginal_x="rug"
-    # )
+    # It is not safe to iterate through cmoc_rug_fig.data whilst updating `fig`.
+    # for d in cmoc_rug_fig.data:
+    #     ic(type(d), isinstance(d, go.Box))
+    #     ic(d.name)
+    #     if isinstance(d, go.Box):
+    #         fig.add_trace(d, row=1, col=1)
 
     for d in cmoc_rug_fig.data:
         ic(type(d), isinstance(d, go.Box))
         ic(d)
         if isinstance(d, go.Box):
             fig.add_trace(d, row=1, col=1)
-
-    # ic(len(cmoc_rug_fig.data))
-
-    # ic(type(cmoc_rug_fig.data[1]))
-    # fig.add_trace(cmoc_rug_fig.data[1], row=1, col=1)
-    # # ic(fig)
-    # fig.add_trace(cmoc_rug_fig.data[3], row=1, col=1)
-    # fig.add_trace(cmoc_rug_fig.data[5], row=1, col=1)
 
     return fig
