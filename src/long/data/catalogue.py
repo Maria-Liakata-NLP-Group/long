@@ -3,6 +3,7 @@ from .source import Source
 import sys
 from icecream import ic
 from pathlib import Path
+from .gptchat_data import gptchat_by_user_source, gptchat_by_thread_source
 
 _available_sources = {}
 
@@ -24,6 +25,8 @@ except ImportError as ie:
 
 
 # Ensure that there is at least one data source
+_available_sources[gptchat_by_user_source.name] = gptchat_by_user_source
+_available_sources[gptchat_by_thread_source.name] = gptchat_by_thread_source
 _available_sources[random_data.name] = random_data
 
 

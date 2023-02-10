@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "long"
+version = "0.1.0"
+description = ""
+authors = ["Andy Smith <andrewphilipsmith@users.noreply.github.com>"]
+
+packages = [
+    { include = "long", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+plotly = "~=5.11"
+dash = "~=2.7"
+icecream = "^2.1.3"
+distinctipy = "^1.2.2"
+pandas = "^1.5.3"
+gunicorn = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.1"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

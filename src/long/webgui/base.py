@@ -10,7 +10,7 @@ from icecream import ic
 
 from .header import header, left_menu, right_menu
 from .timeline_fig import create_user_id_dropdown
-from figures.timeline import fig_config, get_graph, get_cmoc_checklist, _create_rug_plot
+from figures.timeline import fig_config, get_graph, get_cmoc_checklist
 
 # from data import tl_generation_wrapper as long_data
 
@@ -93,16 +93,6 @@ def get_user_tl_graph(
         radius_translucency,
         xrange,
     )
-
-    # return _create_rug_plot(
-    #     datasource,
-    #     user_df,
-    #     selected_cmocs,
-    #     cmoc_options_state,
-    #     radius_width,
-    #     radius_translucency,
-    #     xrange,
-    # )
 
 
 @app.callback(
