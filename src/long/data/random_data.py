@@ -13,7 +13,7 @@ date_range = pd.date_range(start="2017-01-01", end="2021-01-01")
 
 all_cmocs: Dict[str, Dict[str, List[pd.Timestamp]]] = {}
 
-cmoc_random_values = [3, 30, 100]
+cmoc_random_values = [3, 30, 50, 100, 180, 300]
 
 for num_cmoc in cmoc_random_values:
     all_cmocs[f"random_{num_cmoc}"] = {}

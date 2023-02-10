@@ -8,6 +8,9 @@ from icecream import ic
 from plotly.graph_objects import scatter
 from plotly.subplots import make_subplots
 from data.source import Source
+import plotly.express as px
+from pandas import DataFrame
+from numpy import NaN
 
 from data import catalogue
 
@@ -43,7 +46,13 @@ def get_graph(
     xrange,
 ):
     # Create figure with secondary y-axis
-    fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        specs=[[{}], [{"secondary_y": True}]],
+        shared_xaxes=True,
+        row_heights=[0.25, 0.75],
+    )
 
     # Set some defaults
     radius_width = radius_width if radius_width else 7
@@ -76,6 +85,8 @@ def get_graph(
         secondary_y=False,
         range=[0, max(user_df["posts"])],
         title="number of posts per day",
+        row=2,
+        col=1,
     )
 
     cmoc_colors = _get_cmoc_colors(datasource)
@@ -96,6 +107,8 @@ def get_graph(
             radius_opacity=radius_opacity,
         )
 
+    fig = _create_rug_plot(fig, datasource, user_df)
+
     fig.add_trace(
         go.Scatter(
             mode="lines",
@@ -105,6 +118,8 @@ def get_graph(
             xperiod=(24 * 60 * 60 * 1000),
         ),
         secondary_y=False,
+        row=2,
+        col=1,
     )
 
     fig.update_yaxes(
@@ -115,10 +130,12 @@ def get_graph(
         range=[0, 1],
         visible=False,
         secondary_y=True,
+        row=2,
+        col=1,
     )
 
     fig.update_layout(
-        height=600,
+        height=800,
         modebar_orientation="v",
         modebar_activecolor="green",
         showlegend=False,
@@ -136,6 +153,7 @@ def _apply_timeline(fig):
 def get_cmoc_checklist(datasource: Source, cmoc_options_state):
     cmoc_colors = _get_cmoc_colors(datasource)
     items = []
+    ic(datasource.cmoc_methods)
     for method_name in datasource.cmoc_methods:
         cmoc_color = f"rgb{distinctipy.get_rgb256(cmoc_colors.pop())}"
         items.append(
@@ -266,26 +284,46 @@ def _apply_cmoc(
         showlegend=True,
     )
 
+    # rug_df = user_df.copy()
+    # rug_df = rug_df[rug_df[method_name]>0]
+    # # ic(rug_df.head(10))
+    # index_value = ic(list(user_df.columns).index(method_name))
+    # rug_df = rug_df.apply(lambda x: index_value if x[method_name] else None, axis=1)
+    # ic(rug_df.head(10))
+
+    # cmoc_rug_fig = px.scatter(
+    #     rug_df,
+    #     x=rug_df.index,
+    #     # y=method_name,
+    #     # markers=True, lines=False,
+    #     marginal_x="rug"
+    # )
+
+    # ic(cmoc_rug_fig)
+
+    # fig.add_trace(cmoc_rug_fig.data[1], row=1, col=1)
+    # fig.add_trace(cmoc_rug_fig.data[2], row=1, col=1)
+
     # ic(cmoc_scatter)
 
     if show_radius:
-        fig.add_trace(cmoc_bar, secondary_y=True)
+        fig.add_trace(cmoc_bar, secondary_y=True, row=2, col=1)
     if show_points:
-        fig.add_trace(cmoc_scatter, secondary_y=True)
+        fig.add_trace(cmoc_scatter, secondary_y=True, row=2, col=1)
 
     return fig
 
 
 def _apply_rangeslider(fig):
+
     # Add range slider
     fig.update_layout(
-        xaxis=dict(
+        xaxis2=dict(
             rangeselector=dict(
                 buttons=list(
                     [
                         dict(count=1, label="1m", step="month", stepmode="backward"),
                         dict(count=6, label="6m", step="month", stepmode="backward"),
-                        dict(count=1, label="YTD", step="year", stepmode="todate"),
                         dict(count=1, label="1y", step="year", stepmode="backward"),
                         dict(step="all"),
                     ]
@@ -295,5 +333,59 @@ def _apply_rangeslider(fig):
             type="date",
         )
     )
+
+    return fig
+
+
+def _create_rug_plot(fig, datasource: Source, user_df):
+    """
+    See https://stackoverflow.com/questions/70952672/plotly-plot-with-multiple-marginal
+    and the answer https://stackoverflow.com/a/70965954/3837936
+    for the general approach in this method
+    """
+    rug_df = user_df.copy()
+    # ic(len(rug_df))
+
+    for method_name in datasource.cmoc_methods:
+
+        # ic(rug_df.head(10))
+        # index_value = ic(list(user_df.columns).index(method_name))
+        # ic(user_df.columns)
+        rug_df[method_name] = rug_df.apply(
+            (lambda x: method_name if x[method_name] and x[method_name] > 0 else NaN),
+            axis=1,
+        )
+
+    # ic(rug_df.head(100))
+
+    melt_df = rug_df.melt(id_vars=["posts"], var_name="CMoCs", ignore_index=False)
+
+    melt_df = melt_df.dropna(how="any")
+    # ic(melt_df)
+
+    # ic(melt_df.describe(include="all"))
+
+    cmoc_rug_fig = px.scatter(
+        melt_df,
+        x=melt_df.index,
+        y=melt_df["posts"],
+        color="CMoCs",
+        # markers=True, lines=False,
+        marginal_x="rug",
+        render_mode="line",
+    )
+
+    # It is not safe to iterate through cmoc_rug_fig.data whilst updating `fig`.
+    # for d in cmoc_rug_fig.data:
+    #     ic(type(d), isinstance(d, go.Box))
+    #     ic(d.name)
+    #     if isinstance(d, go.Box):
+    #         fig.add_trace(d, row=1, col=1)
+
+    for d in cmoc_rug_fig.data:
+        ic(type(d), isinstance(d, go.Box))
+        ic(d)
+        if isinstance(d, go.Box):
+            fig.add_trace(d, row=1, col=1)
 
     return fig

@@ -11,7 +11,6 @@ from icecream import ic
 from .header import header, left_menu, right_menu
 from .timeline_fig import create_user_id_dropdown
 from figures.timeline import fig_config, get_graph, get_cmoc_checklist
-from figures.timeline_table import get_table
 
 # from data import tl_generation_wrapper as long_data
 
@@ -84,21 +83,16 @@ def get_user_tl_graph(
 
     datasource = catalogue.get_source(datasource_name)
 
-    try:
-        user_df = datasource.get_user_df(user_id)
-        ic(89)
-        return get_graph(
-            datasource,
-            user_df,
-            selected_cmocs,
-            cmoc_options_state,
-            radius_width,
-            radius_translucency,
-            xrange,
-        )
-    except KeyError:
-        ic(100)
-        return html.Div("No graph defined")
+    user_df = datasource.get_user_df(user_id)
+    return get_graph(
+        datasource,
+        user_df,
+        selected_cmocs,
+        cmoc_options_state,
+        radius_width,
+        radius_translucency,
+        xrange,
+    )
 
 
 @app.callback(
@@ -149,25 +143,6 @@ def display_changed_fig_data(relayoutData, restyleData):
     return json.dumps(output, indent=2)
 
 
-@app.callback(
-    Output("main_table", "children"),
-    Input("user_id_dropdown", "value"),
-    Input("datasource_id_dropdown", "value"),
-)
-def get_user_timeline_table(
-    user_id,
-    datasource_name,
-):
-
-    datasource = catalogue.get_source(datasource_name)
-
-    user_df = datasource.get_full_user_timeline(user_id)
-    ic(user_df)
-    return get_table(
-        user_df,
-    )
-
-
 # @app.callback(
 #     Output('legend_cmocs_data', 'children'),
 #     Input('main_graph', 'relayoutData'),
@@ -213,9 +188,6 @@ app.layout = html.Div(
                             #     long_data.user_ids[0], None, None, None, None, None
                             # ),
                             config=fig_config,
-                        ),
-                        html.Div(
-                            id="main_table",
                         ),
                         html.Div(
                             [
