@@ -9,8 +9,7 @@ import pandas as pd
 from io import StringIO
 import re
 import time
-
-# openai.api_key = os.getenv("OPENAI_API_KEY")
+from gptchat_data import generate_chat_text_dir
 
 openai.api_key_path = Path.home() / ".openai-api-key"
 
@@ -32,28 +31,6 @@ def get_prompt(topic: str, number_of_msg: int, number_of_users: int) -> str:
     The results must a CSV file with the columns 'msg_id', 'username', 'text'. The 'text' column must be enclosed with double quotes.
     """
     )
-    # [
-    #     {
-    #         "msg_id": 1,
-    #         "username" :"user1",
-    #         "text" : "It\\'s so cold outside!"
-    #     },
-    #     {
-    #         "msg_id": 2
-    #         "username": "user2"
-    #         "text": "I heard it\\'s supposed to get even colder this week!"
-    #     }
-    # ]
-
-    # The results must in the form of a python pandas DataFrame, with a schema matching in this example:
-
-    # ```
-    # chat_data = pd.DataFrame([
-    #     [1, 'user1', 'It\\'s so cold outside!'],
-    #     [2, 'user2', 'I heard it\\'s supposed to get even colder this week!'],
-    #     ], columns=['msg_id', 'username', 'text'])
-    # ```
-
     return prompt
 
 
@@ -61,6 +38,9 @@ def get_response(prompt):
     response = None
     attempts = 0
 
+    # Retry upto 50 times if there an error from the OpenAI API
+    # There are better ways to implement this. See:
+    # https://platform.openai.com/docs/guides/rate-limits/retrying-with-exponential-backoff
     while response is None:
         attempts += 1
         try:
@@ -84,9 +64,9 @@ def get_response(prompt):
     return response
 
 
-def get_sampling_threads(num_unique_threads: int):
-    MAX_MSG_PER_THREAD = 40
-    MODE_MSG_PER_THREAD = 5
+def get_sampling_threads(
+    num_unique_threads: int, max_msg_per_thread: int, mode_msg_per_thread: int
+):
 
     now_str = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
     result_df = pd.DataFrame()
@@ -95,9 +75,10 @@ def get_sampling_threads(num_unique_threads: int):
 
         the_topic = random.choice(TOPICS)
         number_of_msg = int(
-            random.triangular(1, MAX_MSG_PER_THREAD, MODE_MSG_PER_THREAD)
+            random.triangular(1, max_msg_per_thread, mode_msg_per_thread)
         )
 
+        # A bit of logic about a plausible number pf users vs length of thread
         min_users = 2 if number_of_msg > 2 else 1
         max_users = max(min_users, number_of_msg)
         number_of_users = (
@@ -112,7 +93,6 @@ def get_sampling_threads(num_unique_threads: int):
         # ic(the_prompt)
 
         next_df = None
-        attempt = 0
 
         response = get_response(the_prompt)
         ic(response["choices"][0]["text"])
@@ -127,23 +107,16 @@ def get_sampling_threads(num_unique_threads: int):
             index=[thread_id],
         )
 
-        # while next_df is None and attempt < 5:
-        #     attempt += 1
-        #     ic(attempt)
-        #     response = get_response(the_prompt)
-        #     print(response["choices"][0]["text"])
-        #     with open(f"openai_response_{thread_id}.txt", "w") as out_file:
-        #         out_file.write(str(response))
-
-        #     next_df = parse_response(response=response, thread_id=thread_id)
-
         if next_df is None:
             raise ValueError("Unable to get parable response from OpenAI")
 
-        next_df.to_csv(f"openai_response_{thread_id}.csv")
+        next_df.to_csv(generate_chat_text_dir / f"individual_thread_{thread_id}.csv")
 
         result_df = pd.concat([result_df, next_df])
-        result_df.to_json(f"openai_output_{now_str}.json")
+        # Save and clobber on every loop, in case of interruption
+        result_df.to_json(
+            generate_chat_text_dir / f"combined_raw_threads_{now_str}.json"
+        )
         # ic(response)
 
     return result_df
@@ -151,11 +124,7 @@ def get_sampling_threads(num_unique_threads: int):
 
 def combine_json_files():
 
-    in_files = [
-        "openai_output_20230118T184035.json",
-        "openai_output_20230120T172705.json",
-        "openai_output_20230123T175624.json",
-    ]
+    in_files = generate_chat_text_dir.glob("combined_raw_threads_*.json")
 
     df = pd.DataFrame()
 
@@ -165,25 +134,16 @@ def combine_json_files():
         df = pd.concat([df, in_df], ignore_index=True)
         df["thread_id"] = df.index
         df = df.head(300)
-        df.to_json(f"openai_thread_pool.json")
+        df.to_json(generate_chat_text_dir / f"openai_thread_pool.json")
         ic(len(in_df), len(df))
 
 
 if __name__ == "__main__":
 
-    # # ic(create_timestamps(6))
-    # now_str = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
-    # ic(now_str)
-    # result_df = get_sampling_threads(2)
-    # ic(result_df.head(20))
-    # result_df.to_json(f"openai_output_{now_str}.json")
-    # # ic(response["choices"][0]["text"])
+    # Create a number of example thread using then ChatGPT API
+    result_df = get_sampling_threads(
+        num_unique_threads=300, max_msg_per_thread=40, mode_msg_per_thread=5
+    )
 
-    combine_json_files()
-
-    # with open("openai_output.txt", "w") as out_file:
-    #     out_file.write(response["choices"][0]["text"])
-    # result_df = pd.read_csv("openai_output.csv")
-    # gbdf = result_df.groupby("thread_id")
-    # ic(result_df.head())
-    # ic(gbdf.count())
+    # Only required if needed to combine the output from multiple runs:
+    # combine_json_files()

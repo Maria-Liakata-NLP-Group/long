@@ -3,10 +3,10 @@ import pandas as pd
 from icecream import ic
 from pathlib import Path
 
-generate_chat_text_dir = (
+_generate_chat_text_dir = (
     Path(__file__).parent / ".." / ".." / ".." / "generate_chat_text"
 )
-generate_chat_text_dir = generate_chat_text_dir.resolve()
+generate_chat_text_dir = _generate_chat_text_dir.resolve()
 
 
 def aggregate_by_user(full_df: pd.DataFrame):
