@@ -1,5 +1,7 @@
 .env/
 __pycache__/
 misc/figs/~$estimates-per-milestone.xlsx
-generate_chat_text/*
+generate_chat_text/openai_response_*.csv
+generate_chat_text/individual_thread_*.csv
 .coverage
+poetry.lock

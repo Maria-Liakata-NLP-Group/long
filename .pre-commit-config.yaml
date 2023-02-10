@@ -5,10 +5,12 @@ repos:
     rev: v3.2.0
     hooks:
     -   id: trailing-whitespace
+        exclude: (generate_chat_text/)
     -   id: end-of-file-fixer
+        exclude: (generate_chat_text/)
     -   id: check-yaml
     -   id: check-added-large-files
-        exclude: docs/images/
+        exclude: (docs/images/|generate_chat_text/)
 -   repo: https://github.com/psf/black
     rev: 22.6.0
     hooks:

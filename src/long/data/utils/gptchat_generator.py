@@ -56,9 +56,9 @@ def get_response(prompt):
         except (
             openai.error.ServiceUnavailableError,
             openai.error.RateLimitError,
-        ) as oia_error:
+        ) as openai_error:
             if attempts > 50:
-                raise oia_error
+                raise openai_error
             time.sleep(30)
 
     return response
