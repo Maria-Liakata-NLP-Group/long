@@ -10,6 +10,7 @@ import datetime
 from pathlib import Path
 import re
 import math
+from long.data.gptchat_data import generate_chat_text_dir
 
 
 def create_start_time():
@@ -141,12 +142,16 @@ class AllUserPool:
         return [f"gptchat_user_{id}" for id in user_ids]
 
 
-def resample(total_samples):
+def resample(total_samples, num_unique_users):
+    """
+    total_sample => The number of threads that in the resampled data
+    num_unique_users => The number of unique users that will exist in the resampled data. Values smaller then the number of messages in a thread may cause ValueError to be raised.
+    """
     # Load
-    generate_chat_text_dir = (
-        Path(__file__).parent / ".." / ".." / ".." / "generate_chat_text"
-    )
-    generate_chat_text_dir = generate_chat_text_dir.resolve()
+    # generate_chat_text_dir = (
+    #     Path(__file__).parent / ".." / ".." / ".." / "generate_chat_text"
+    # )
+    # generate_chat_text_dir = generate_chat_text_dir.resolve()
 
     thread_pool = pd.read_json(generate_chat_text_dir / "normalised_thread_pool.json")
 
@@ -164,7 +169,7 @@ def resample(total_samples):
     # ic(len(username_pool))
     # ic(len(username_set))
 
-    all_user_pool = AllUserPool(500)
+    all_user_pool = AllUserPool(num_unique_users)
 
     main_collection = pd.DataFrame()
 
@@ -175,13 +180,9 @@ def resample(total_samples):
         # ic(source_thread_id)
         source_thread = thread_pool[thread_pool["thread_id"] == source_thread_id].copy()
 
-        # ic(source_thread[['thread_id', 'msg_id', 'username']])
-        # ic(source_thread.columns)
-
         # Apply dates
         new_timestamps = create_timestamps(len(source_thread))
         source_thread["timestamp"] = new_timestamps
-        # ic(source_thread[["timestamp", 'thread_id', 'msg_id', 'username']])
 
         # Apply users
         users_from_thread = source_thread["username"].unique()
@@ -192,8 +193,6 @@ def resample(total_samples):
             user_name_map[old_uname] = new_uname
 
         source_thread["username"] = source_thread["username"].map(user_name_map)
-        # ic(source_thread[["timestamp", 'thread_id', 'msg_id', 'username']])
-        # ic(source_thread.columns)
 
         # Add to main
         if len(main_collection) > 0:
@@ -203,9 +202,10 @@ def resample(total_samples):
         else:
             main_collection = source_thread
 
-    main_collection.to_json(generate_chat_text_dir / "main_collection.json")
+    return main_collection
 
 
 if __name__ == "__main__":
     # create_normalised_thread_pool("openai_thread_pool.json")
-    resample(2)
+    df = resample(total_samples=1000, num_unique_users=75)
+    df.to_json(generate_chat_text_dir / "main_collection2.json")

@@ -2,3 +2,4 @@
 __pycache__/
 misc/figs/~$estimates-per-milestone.xlsx
 generate_chat_text/*
+.coverage

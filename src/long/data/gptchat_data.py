@@ -8,6 +8,23 @@ _generate_chat_text_dir = (
 )
 generate_chat_text_dir = _generate_chat_text_dir.resolve()
 
+"""
+
+
+Contents of the `generate_chat_text_dir` dir:
+
+"individual_thread_{thread_id}.csv"     | An individual output from ChatGPT for a single prompt. Note that this are
+                                          not guaranteed to be well formed. There are lots of formatting mistakes and
+                                          they do not parse cleanly using most CSV parsers.
+"combined_raw_threads_{now_str}.json"   | The combination of multiple individual_thread_* files. Still not guaranteed
+                                          to be well formed.
+"normalised_thread_pool.json"           | The raw data, converted into teh first normative form. Each row represents a
+                                          single message within a thread.
+"main_collection.json"                  | The data, resampled to create a larger example dataset, by applying different
+                                          date and users to randomly selected threads.
+
+"""
+
 
 def aggregate_by_user(full_df: pd.DataFrame):
     full_df["date"] = full_df["timestamp"].apply(lambda ts: ts.date())
