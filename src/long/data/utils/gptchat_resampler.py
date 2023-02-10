@@ -208,4 +208,4 @@ def resample(total_samples, num_unique_users):
 if __name__ == "__main__":
     # create_normalised_thread_pool("openai_thread_pool.json")
     df = resample(total_samples=1000, num_unique_users=75)
-    df.to_json(generate_chat_text_dir / "main_collection2.json")
+    df.to_json(generate_chat_text_dir / "main_collection.json")
