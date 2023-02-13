@@ -5,3 +5,6 @@ generate_chat_text/openai_response_*.csv
 generate_chat_text/individual_thread_*.csv
 .coverage
 poetry.lock
+generate_chat_text/openai_thread_pool.json
+generate_chat_text/openai_response_*.txt
+generate_chat_text/openai_output_*.json
