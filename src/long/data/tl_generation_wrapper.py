@@ -3,7 +3,7 @@ from pathlib import Path
 
 from icecream import ic
 
-from .source import Source
+from .source import AggregateSource
 
 TL_GENERATION_PATH = Path("../anthony/timeline_generation").absolute().resolve()
 
@@ -20,7 +20,7 @@ try:
 
     all_cmocs = my_pickler("i", "candidate_moments_of_change", folder="datasets")
 
-    _source = Source("talklife-aggregated", data_daily_interactions, all_cmocs)
+    _source = AggregateSource("talklife-aggregated", data_daily_interactions, all_cmocs)
     # _source.cmoc_method_friendly_names = lambda n:
 
     def method_name_wrapper(method_id: str) -> str:

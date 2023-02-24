@@ -1,4 +1,4 @@
-from long.data.source import Source
+from long.data.source import AggregateSource
 import pandas as pd
 from icecream import ic
 from pathlib import Path
@@ -70,7 +70,7 @@ def prep_gptchat_by_thread_source():
     main_collection = pd.read_json(generate_chat_text_dir / "main_collection.json")
     daily_interactions = aggregate_by_user(main_collection)
     cmocs = {}
-    _source = Source("gptchat_by_thread", daily_interactions, cmocs)
+    _source = AggregateSource("gptchat_by_thread", daily_interactions, cmocs)
     _source.full_timeline_df = main_collection
 
     return _source
@@ -80,7 +80,7 @@ def prep_gptchat_by_user_source():
     main_collection = pd.read_json(generate_chat_text_dir / "main_collection.json")
     daily_interactions = aggregate_by_user(main_collection)
     cmocs = {}
-    _source = Source("gptchat_by_user", daily_interactions, cmocs)
+    _source = AggregateSource("gptchat_by_user", daily_interactions, cmocs)
     _source.full_timeline_df = main_collection
 
     return _source

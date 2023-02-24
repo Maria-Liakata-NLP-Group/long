@@ -1,5 +1,5 @@
 from .random_data import random_data
-from .source import Source
+from .source import AggregateSource
 import sys
 from icecream import ic
 from pathlib import Path
@@ -30,7 +30,7 @@ _available_sources[gptchat_by_thread_source.name] = gptchat_by_thread_source
 _available_sources[random_data.name] = random_data
 
 
-def list_source_names() -> Source:
+def list_source_names() -> AggregateSource:
     return _available_sources.keys()
 
 
@@ -38,5 +38,5 @@ def get_all_sources():
     return _available_sources.values()
 
 
-def get_source(source_name: str) -> Source:
+def get_source(source_name: str) -> AggregateSource:
     return _available_sources[source_name]
