@@ -10,17 +10,22 @@ from icecream import ic
 
 from .header import header, left_menu, right_menu
 from .timeline_fig import create_user_id_dropdown
+from figures.timeline_table import get_table
 from figures.timeline import fig_config, get_graph, get_cmoc_checklist
 
 # from data import tl_generation_wrapper as long_data
 
 
-external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+# external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+
+ic(__name__)
 
 app = Dash(
     __name__,
     title="LoNG",
-    external_stylesheets=external_stylesheets,
+    # assets_url_path="/assets/",
+    assets_folder="../assets/",
+    # external_stylesheets=external_stylesheets,
     suppress_callback_exceptions=True,
 )
 
@@ -42,16 +47,16 @@ def update_user_id_dropdown(datasource_name):
     return create_user_id_dropdown(datasource_name)
 
 
-@app.callback(
-    Output("main_graph", "figure"),
-    Input("user_id_dropdown", "value"),
-    Input("datasource_id_dropdown", "value"),
-    Input({"type": "cmoc_visible_checklist", "name": ALL}, "value"),
-    Input("cmoc_options_checklist", "value"),
-    Input("cmoc_options_radius_width", "value"),
-    Input("cmoc_options_radius_translucency", "value"),
-    State("main_graph", "relayoutData"),
-)
+# @app.callback(
+#     Output("main_graph", "figure"),
+#     Input("user_id_dropdown", "value"),
+#     Input("datasource_id_dropdown", "value"),
+#     Input({"type": "cmoc_visible_checklist", "name": ALL}, "value"),
+#     Input("cmoc_options_checklist", "value"),
+#     Input("cmoc_options_radius_width", "value"),
+#     Input("cmoc_options_radius_translucency", "value"),
+#     State("main_graph", "relayoutData"),
+# )
 def get_user_tl_graph(
     user_id,
     datasource_name,
@@ -93,6 +98,31 @@ def get_user_tl_graph(
         radius_translucency,
         xrange,
     )
+
+
+@app.callback(
+    Output("timeline_table_container", "children"),
+    Input("user_id_dropdown", "value"),
+    Input("datasource_id_dropdown", "value"),
+    Input({"type": "cmoc_visible_checklist", "name": ALL}, "value"),
+    Input("cmoc_options_checklist", "value"),
+    Input("cmoc_options_radius_width", "value"),
+    Input("cmoc_options_radius_translucency", "value"),
+    State("main_graph", "relayoutData"),
+)
+def get_user_timetime_table(
+    user_id,
+    datasource_name,
+    cmoc_selection,
+    cmoc_options_state,
+    radius_width,
+    radius_translucency,
+    main_graph_layout,
+):
+    datasource = catalogue.get_source(datasource_name)
+    user_df = datasource.get_full_user_timeline(user_id)
+
+    return get_table(user_df=user_df)
 
 
 @app.callback(
@@ -189,6 +219,10 @@ app.layout = html.Div(
                             # ),
                             config=fig_config,
                         ),
+                        # html.Div([
+                        #     html.Img(src='/assets/image.png')
+                        # ]),
+                        html.Div(id="timeline_table_container"),
                         html.Div(
                             [
                                 dcc.Markdown(

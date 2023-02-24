@@ -1,0 +1,51 @@
+span.username {
+    font-weight: lighter;
+    color: gray;
+}
+span.timestamp {
+    font-weight: lighter;
+    color: gray;
+}
+span.thread_id {
+    font-weight: lighter;
+    color: grey;
+}
+p.thread_text {
+    font-weight: bolder;
+    color: black
+}
+div.thread_row {
+    color: black;
+    border: blue;
+    border-style: solid;
+}
+body {
+    font-family: sans-serif;
+}
+/* username {
+    color: #f00;
+} */
+
+/* td.dash-cell.column-0 {
+    color: #f00;
+    position: relative;
+    column-span: 2;
+}
+
+
+td.dash-cell.column-5 {
+    color: #f00;
+    border: blue;
+    border-style: solid;
+    background-color: lightgreen;
+    position: relative;
+    top: 0px;
+    flex-grow: 10;
+    text-align: center;
+} */
+
+/* tr {
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: flex-start;
+} */
