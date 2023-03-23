@@ -124,19 +124,20 @@ class Source:
           - [x] aggregation by thread
           - [x] aggregation by timestep (use pd.Grouper https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#grouping-with-a-grouper-specification)
           - [ ] (optional) filtered by threads started by that user (where parent_thread_id == root)
-          - [ ] (optional) filtered per timerange
+          - [x] (optional) filtered per timerange
 
-        - [ ] whole timeline
+        - [x] whole timeline
           - [x] aggregation by user
           - [x] aggregation by timestep
-          - [ ] filtered per thread
-          - [ ] (optional) filtered per timerange
+          - [x] filtered per thread
+          - [x] (optional) filtered per timerange
 
         *
         """
         # Check that the entity columns is
         if entity_group_by not in self._entity_columns:
             raise ValueError(f"{entity_group_by} not in {self._entity_columns}")
+
 
         if date_range is not None:
             # We need to look at how the date_range interacts with the time_grouper
@@ -158,7 +159,7 @@ class Source:
         else:
             _df = self._df
 
-        ic(_df)
+        ic(_df.columns)
 
         if entity_permitted_values is not None:
             # Ensure entity_permitted_values is a list
@@ -168,6 +169,7 @@ class Source:
             _df = _df[_df[entity_group_by].isin(entity_permitted_values)]
 
         # Now we can group by the entity and time
+        ic([entity_group_by, time_grouper])
         result = _df.groupby([entity_group_by, time_grouper]).count()
 
         return result

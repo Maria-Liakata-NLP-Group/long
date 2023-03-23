@@ -74,6 +74,7 @@ def test_source_entity_columns(example_source):
     "entity_group_by,freq,entity_filter,date_range,expected_result",
     [
         ("user_id", "D", None, None, {"thread_id": [1, 1, 1, 2, 1]}),
+        ("user_id", None, None, None, {"thread_id": [1, 1, 1, 2, 1]}),
         ("thread_id", "2D", None, None, {"user_id": [2, 3, 1]}),
         (
             "user_id",
@@ -90,7 +91,7 @@ def test_source_entity_columns(example_source):
             {"thread_id": [1]},
         ),
     ],
-    ids=[1, 2, 3, 4],
+    ids=[1, 2, 3, 4, 5],
 )
 def test_get_aggregation(
     example_source, entity_group_by, freq, entity_filter, date_range, expected_result
