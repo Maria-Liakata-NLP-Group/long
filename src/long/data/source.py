@@ -138,7 +138,6 @@ class Source:
         if entity_group_by not in self._entity_columns:
             raise ValueError(f"{entity_group_by} not in {self._entity_columns}")
 
-
         if date_range is not None:
             # We need to look at how the date_range interacts with the time_grouper
             # Is there an offset that needs to be accommodated to ensure that the
