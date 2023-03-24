@@ -1,7 +1,7 @@
 from dash import dcc, html, dash_table
 from icecream import ic
 from data import catalogue
-from data.source import AggregateSource
+from data.source import Source
 import pandas as pd
 
 
@@ -12,8 +12,8 @@ def get_table(user_df: pd.DataFrame):
     else:
         ic("building table")
         # See https://github.com/Maria-Liakata-NLP-Group/long/issues/55#issuecomment-1434516796 for description of these options
-        # my_table = get_table_native_layout(user_df)
-        my_table = get_table_alternative_rows(user_df)
+        my_table = get_table_native_layout(user_df)
+        # my_table = get_table_alternative_rows(user_df)
         # my_table = get_table_combine_metadata(user_df)
 
     return my_table
