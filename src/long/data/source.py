@@ -158,7 +158,9 @@ class Source:
         else:
             _df = self._df
 
-        ic(_df.columns)
+        _df = _df.copy()
+
+        # ic(_df.columns)
 
         if entity_permitted_values is not None:
             # Ensure entity_permitted_values is a list
@@ -167,9 +169,18 @@ class Source:
 
             _df = _df[_df[entity_group_by].isin(entity_permitted_values)]
 
+        # _df = _df.sort_values(by=self.time_column, ascending=True)
+        # ic(_df.columns)
+
+        ic(entity_permitted_values)
+        ic(len(_df))
+        # ic(_df.head())
         # Now we can group by the entity and time
-        ic([entity_group_by, time_grouper])
-        result = _df.groupby([entity_group_by, time_grouper]).count()
+        # ic([entity_group_by, time_grouper])
+        grouped = _df.groupby([entity_group_by, time_grouper])
+        # ic(grouped.groups.keys())
+        # ic(grouped.head())
+        result = grouped.sum()
 
         return result
 
