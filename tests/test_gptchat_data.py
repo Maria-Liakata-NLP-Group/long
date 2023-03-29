@@ -10,14 +10,16 @@ from long.data.gptchat_data import prep_gptchat_by_user_source
         "Unknown reason for failure. Each call to `source.get_aggregation` _*should*_ "
         "return a new independent dataframe. The order of the tests should _*not*_ "
         "matter."
-        "However multiple calls do results in intermittant failures."
-        " `ValueError: all keys need to be the same shape` is rasied by the underlying `grouped.count()` method."
+        "However multiple calls do results in intermittent failures."
+        " `ValueError: all keys need to be the same shape` is raised by the underlying `grouped.count()` method."
         ""
         "As a minimal example, this example passes:"
         " `for thread_id in [211, 97, 41]`"
         ""
-        "However, by simple reordering the list, the example fails:"
+        "However, by simply reordering the list, the example fails:"
         " `for thread_id in [97, 41, 211]`"
+        ""
+        "See https://github.com/Maria-Liakata-NLP-Group/long/issues/64"
     )
 )
 def test_prep_gptchat_by_user_source():
