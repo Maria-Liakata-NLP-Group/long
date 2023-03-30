@@ -19,44 +19,6 @@ def get_table(user_df: pd.DataFrame):
     return my_table
 
 
-def get_table_combine_metadata(user_df: pd.DataFrame):
-    ic("get_table_combine_metadata")
-    col_details = [
-        {"id": "metadata", "name": "Metadata"},
-        {"id": "text", "name": "Text"},
-    ]
-
-    my_table = dash_table.DataTable(
-        style_data={"whiteSpace": "pre-wrap", "height": "auto", "textAlign": "left"},
-        data=combine_metadata_columns(user_df),
-        # columns = ic([{"name": i, "id": i} for i in user_df.columns])
-        columns=col_details,
-        style_data_conditional=[
-            {
-                "if": {
-                    "column_id": "metadata",
-                },
-                "backgroundColor": "rgb(220, 220, 220)",
-            },
-            {
-                "if": {
-                    "column_id": "text",
-                },
-                "textAlign": "left",
-            },
-        ],
-        sort_action="native",
-        filter_action="native",
-        page_action="native",
-        page_current=0,
-        page_size=10,
-    )
-
-    table_div = html.Div(my_table)
-
-    return table_div
-
-
 def get_table_native_layout(user_df: pd.DataFrame):
     ic("get_table_native_layout")
     col_details = [
@@ -87,6 +49,44 @@ def get_table_native_layout(user_df: pd.DataFrame):
             {
                 "if": {
                     "row_index": "odd",
+                },
+                "backgroundColor": "rgb(220, 220, 220)",
+            },
+            {
+                "if": {
+                    "column_id": "text",
+                },
+                "textAlign": "left",
+            },
+        ],
+        sort_action="native",
+        filter_action="native",
+        page_action="native",
+        page_current=0,
+        page_size=10,
+    )
+
+    table_div = html.Div(my_table)
+
+    return table_div
+
+
+def get_table_combine_metadata(user_df: pd.DataFrame):
+    ic("get_table_combine_metadata")
+    col_details = [
+        {"id": "metadata", "name": "Metadata"},
+        {"id": "text", "name": "Text"},
+    ]
+
+    my_table = dash_table.DataTable(
+        style_data={"whiteSpace": "pre-wrap", "height": "auto", "textAlign": "left"},
+        data=combine_metadata_columns(user_df),
+        # columns = ic([{"name": i, "id": i} for i in user_df.columns])
+        columns=col_details,
+        style_data_conditional=[
+            {
+                "if": {
+                    "column_id": "metadata",
                 },
                 "backgroundColor": "rgb(220, 220, 220)",
             },

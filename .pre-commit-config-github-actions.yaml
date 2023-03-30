@@ -3,6 +3,7 @@
 
 # The docker based version of this hook `hadolint-docker` does not work on M1 Macs
 # However we use it only for GitHub Actions linting
+repos:
 -   repo: https://github.com/hadolint/hadolint
     rev: v2.10.0
     hooks:

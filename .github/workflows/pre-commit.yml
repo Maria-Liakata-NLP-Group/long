@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.7"
+          python-version: "3.10"
       - name: Install Pre-Commit
         shell: bash
         run: |
@@ -43,4 +43,8 @@ jobs:
       - name: Run Pre-Commit Hooks
         shell: bash
         run: |
-          pre-commit run --all-files --config .pre-commit-config-github-actions.yaml
+          pre-commit run --all-files --config .pre-commit-config-github-actions.yaml || command_failed=1
+          if [ -n "$command_failed" ]; then
+            cat /home/runner/work/long/long/~/.caches/pre-commit/pre-commit.log
+            exit 1
+          fi

@@ -7,7 +7,7 @@ from dash import html, dcc
 from icecream import ic
 from plotly.graph_objects import scatter
 from plotly.subplots import make_subplots
-from data.source import Source
+from data.source import AggregateSource
 import plotly.express as px
 from pandas import DataFrame
 from numpy import NaN
@@ -28,7 +28,7 @@ fig_config = {
 }
 
 
-def _get_cmoc_colors(datasource: Source):
+def _get_cmoc_colors(datasource: AggregateSource):
     # rng is a random seed. We fix it here so that the same set of colors will be produced on each call.
     # See https://distinctipy.readthedocs.io/en/latest/api.html#distinctipy.distinctipy.get_colors
     return distinctipy.get_colors(
@@ -37,7 +37,7 @@ def _get_cmoc_colors(datasource: Source):
 
 
 def get_graph(
-    datasource: Source,
+    datasource: AggregateSource,
     user_df,
     selected_cmocs,
     cmoc_options_state,
@@ -150,7 +150,7 @@ def _apply_timeline(fig):
     pass
 
 
-def get_cmoc_checklist(datasource: Source, cmoc_options_state):
+def get_cmoc_checklist(datasource: AggregateSource, cmoc_options_state):
     cmoc_colors = _get_cmoc_colors(datasource)
     items = []
     ic(datasource.cmoc_methods)
@@ -337,7 +337,7 @@ def _apply_rangeslider(fig):
     return fig
 
 
-def _create_rug_plot(fig, datasource: Source, user_df):
+def _create_rug_plot(fig, datasource: AggregateSource, user_df):
     """
     See https://stackoverflow.com/questions/70952672/plotly-plot-with-multiple-marginal
     and the answer https://stackoverflow.com/a/70965954/3837936

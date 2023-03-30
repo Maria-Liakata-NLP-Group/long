@@ -5,7 +5,7 @@ from typing import Dict, List
 import pandas as pd
 from icecream import ic
 
-from .source import Source
+from .source import AggregateSource
 
 data_daily_interactions = {}
 date_range = pd.date_range(start="2017-01-01", end="2021-01-01")
@@ -51,4 +51,4 @@ for user_num in range(12):
 
     # all_cmocs = {}
 
-random_data = Source("random_data", data_daily_interactions, all_cmocs)
+random_data = AggregateSource("random_data", data_daily_interactions, all_cmocs)

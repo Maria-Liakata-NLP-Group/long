@@ -1,4 +1,4 @@
-from long.data.source import Source
+from long.data.source import AggregateSource, Source
 import pandas as pd
 from icecream import ic
 from pathlib import Path
@@ -9,8 +9,6 @@ _generate_chat_text_dir = (
 generate_chat_text_dir = _generate_chat_text_dir.resolve()
 
 """
-
-
 Contents of the `generate_chat_text_dir` dir:
 
 "individual_thread_{thread_id}.csv"     | An individual output from ChatGPT for a single prompt. Note that this are
@@ -70,20 +68,38 @@ def prep_gptchat_by_thread_source():
     main_collection = pd.read_json(generate_chat_text_dir / "main_collection.json")
     daily_interactions = aggregate_by_user(main_collection)
     cmocs = {}
-    _source = Source("gptchat_by_thread", daily_interactions, cmocs)
+    _source = AggregateSource("gptchat_by_thread", daily_interactions, cmocs)
     _source.full_timeline_df = main_collection
 
     return _source
+
+
+# def prep_gptchat_by_user_source():
+#     main_collection = pd.read_json(generate_chat_text_dir / "main_collection.json")
+#     daily_interactions = aggregate_by_user(main_collection)
+#     cmocs = {}
+#     _source = AggregateSource("gptchat_by_user", daily_interactions, cmocs)
+#     _source.full_timeline_df = main_collection
+
+#     return _source
 
 
 def prep_gptchat_by_user_source():
     main_collection = pd.read_json(generate_chat_text_dir / "main_collection.json")
-    daily_interactions = aggregate_by_user(main_collection)
-    cmocs = {}
-    _source = Source("gptchat_by_user", daily_interactions, cmocs)
-    _source.full_timeline_df = main_collection
 
-    return _source
+    cgpt_source = Source(
+        "gptchat_by_user",
+        main_collection,
+        unique_id_column="msg_id",
+        parent_id_column=None,
+        entity_columns=["username", "thread_id"],
+        time_column="timestamp",
+        cmoc_columns=None,
+    )
+
+    ic(cgpt_source.data.head(20))
+
+    return cgpt_source
 
 
 gptchat_by_user_source = prep_gptchat_by_user_source()
