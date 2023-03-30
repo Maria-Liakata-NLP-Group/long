@@ -9,7 +9,7 @@ from dash import dcc, html
 # from plotly.graph_objects import scatter
 # from plotly.subplots import make_subplots
 
-from data import catalogue
+from long.data import catalogue
 
 # Hardcoded data source selection here
 # long_data = catalogue.get_source("random_data")

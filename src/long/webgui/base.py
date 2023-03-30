@@ -5,13 +5,13 @@ import plotly.express as px
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output, State, ALL
 
-from data import catalogue
+from long.data import catalogue
 from icecream import ic
 
 from .header import header, left_menu, right_menu
 from .timeline_fig import create_user_id_dropdown
-from figures.timeline_table import get_table
-from figures.timeline import fig_config, get_graph, get_cmoc_checklist
+from long.figures.timeline_table import get_table
+from long.figures.timeline import fig_config, get_graph, get_cmoc_checklist
 
 # from data import tl_generation_wrapper as long_data
 
