@@ -8,3 +8,4 @@ poetry.lock
 generate_chat_text/openai_thread_pool.json
 generate_chat_text/openai_response_*.txt
 generate_chat_text/openai_output_*.json
+.vscode/settings.json
