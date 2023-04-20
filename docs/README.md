@@ -22,3 +22,5 @@ LLLLLLLLLLLLLLLLLLLLLLLL   ooooooooooo   NNNNNNNN         NNNNNNN        GGGGGG 
 "LoNG" is a web user interface for performing longitudinal NLP analysis.
 
 Currently in its infancy, it is planned as integrated collection of tools.
+
+The Docs have been put together using [docsify](https://docsify.js.org/#/?id=docsify).
