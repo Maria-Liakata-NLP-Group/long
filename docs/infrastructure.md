@@ -10,3 +10,8 @@ In summary, this Docker Compose file creates:
 These three services are connected to a common `internal` network, which allows them to communicate with each other.
 
 The `webapp` service builds a Docker image using the `Dockerfile` located in the `src/` directory.
+
+## Nginx
+[Nginx](https://www.nginx.com/) is employed to distribute incoming traffic (reverse proxy) to the multi-container Docker application.
+It acts as an entry point for all incoming requests and routes each request to the appropriate container based on the request's URL.
+The Nginx configuration is specified through the `nginx.conf` file.
