@@ -5,3 +5,4 @@
 * [Getting started](getting_started.md)
 * [Adding Data](adding_data.md)
 * [Contributing](contributing.md)
+* [Infrastructure](infrastructure.md)
