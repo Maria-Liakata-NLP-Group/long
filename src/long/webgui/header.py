@@ -1,7 +1,7 @@
 from dash import Dash, Input, Output, dcc, html
 from icecream import ic
 from .timeline_fig import create_cmoc_options_list
-from data import catalogue
+from long.data import catalogue
 
 styles = {
     "pre": {"border": "thin lightgrey solid", "overflowX": "scroll"},

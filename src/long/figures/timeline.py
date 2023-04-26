@@ -7,12 +7,12 @@ from dash import html, dcc
 from icecream import ic
 from plotly.graph_objects import scatter
 from plotly.subplots import make_subplots
-from data.source import AggregateSource
+from long.data.source import AggregateSource
 import plotly.express as px
 from pandas import DataFrame
 from numpy import NaN
 
-from data import catalogue
+from long.data import catalogue
 
 # Hardcoded data source selection here
 # long_data = catalogue.get_source("random_data")

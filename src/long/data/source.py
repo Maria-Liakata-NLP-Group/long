@@ -133,6 +133,9 @@ class Source:
           - [x] (optional) filtered per timerange
 
         *
+        # TODO: This currently returns a dataframe, which has been aggregated.
+        However it would be more consistent to return an instance of an AgrregateSource object
+
         """
         # Check that the entity columns is
         if entity_group_by not in self._entity_columns:

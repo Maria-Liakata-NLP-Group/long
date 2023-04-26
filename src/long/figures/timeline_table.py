@@ -1,7 +1,7 @@
 from dash import dcc, html, dash_table
 from icecream import ic
-from data import catalogue
-from data.source import Source
+from long.data import catalogue
+from long.data.source import Source
 import pandas as pd
 
 
