@@ -47,6 +47,7 @@ def update_user_id_dropdown(datasource_name):
     return create_user_id_dropdown(datasource_name)
 
 
+# TODO: Re-enable these callbacks to reenable the timeline graph
 # @app.callback(
 #     Output("main_graph", "figure"),
 #     Input("user_id_dropdown", "value"),
@@ -161,6 +162,12 @@ def filter_legend_state_changes(cmoc_selection, cmoc_options_state):
     ic(output)
 
 
+# TODO: Use the JSON in this text box as a central store for the state of the app.
+# The callback for this text should have inputs from all (or nearly all) other components on the page
+# Format the JSON in a predictable way so that it can be parsed by other components.
+# All other components _should_ be able to have a callback that only requires the `Input("relayout_data", "children")`
+# You will probably want a better name for it.
+# Also make this text box zero-sized, or make it collapsible (and collapsed by default).
 @app.callback(
     Output("relayout_data", "children"),
     Input("main_graph", "relayoutData"),
